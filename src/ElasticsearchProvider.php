@@ -21,7 +21,7 @@ class ElasticsearchProvider extends ServiceProvider
         switch ($provider) {
             case 'aws':
                 app(EngineManager::class)->extend('elasticsearch', function($app) {
-                    $provider = CredentialProvider::defaultCredentials();
+                    $provider = CredentialProvider::defaultProvider();
                     $handler = new ElasticsearchPhpHandler(getenv('AWS_REGION'), $provider);
                     return new ElasticsearchEngine(ElasticBuilder::create()
                         ->setHandler($handler)
