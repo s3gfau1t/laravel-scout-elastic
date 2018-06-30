@@ -2,6 +2,9 @@
 
 namespace ScoutEngines\Elasticsearch;
 
+use Aws\Credentials\CredentialProvider;
+use Aws\Credentials\Credentials;
+use Aws\ElasticsearchService\ElasticsearchPhpHandler;
 use Laravel\Scout\EngineManager;
 use Illuminate\Support\ServiceProvider;
 use Elasticsearch\ClientBuilder as ElasticBuilder;
@@ -13,12 +16,31 @@ class ElasticsearchProvider extends ServiceProvider
      */
     public function boot()
     {
-        app(EngineManager::class)->extend('elasticsearch', function($app) {
-            return new ElasticsearchEngine(ElasticBuilder::create()
-                ->setHosts(config('scout.elasticsearch.hosts'))
-                ->build(),
-                config('scout.elasticsearch.index')
-            );
-        });
+        $provider = env('ELASTICSEARCH_PROVIDER', 'elastic');
+
+        switch ($provider) {
+            case 'aws':
+                app(EngineManager::class)->extend('elasticsearch', function($app) {
+                    $provider = CredentialProvider::defaultCredentials();
+                    $handler = new ElasticsearchPhpHandler(getenv('AWS_REGION'), $provider);
+                    return new ElasticsearchEngine(ElasticBuilder::create()
+                        ->setHandler($handler)
+                        ->setHosts(config('scout.elasticsearch.hosts'))
+                        ->build(),
+                        config('scout.elasticsearch.index')
+                    );
+                });
+                break;
+            case 'elastic':
+            default:
+                app(EngineManager::class)->extend('elasticsearch', function($app) {
+                    return new ElasticsearchEngine(ElasticBuilder::create()
+                        ->setHosts(config('scout.elasticsearch.hosts'))
+                        ->build(),
+                        config('scout.elasticsearch.index')
+                    );
+                });
+                break;
+        }
     }
 }
