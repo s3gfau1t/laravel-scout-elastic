@@ -39,12 +39,12 @@ class CreateIndex extends Command
      */
     public function handle()
     {
-        $provider = env('ELASTICSEARCH_PROVIDER', 'elastic');
+        $provider = config('laravel-scout-elastic.provider', 'elastic');
 
         switch ($provider) {
             case 'aws':
                 // Create a handler (with the region of your Amazon Elasticsearch Service domain)
-                $handler = new ElasticsearchPhpHandler(env('AWS_REGION'));
+                $handler = new ElasticsearchPhpHandler(config('laravel-scout-elastic.region', 'us-west-2'));
 
                 // Use this handler to create an Elasticsearch-PHP client
                 $client = ClientBuilder::create()

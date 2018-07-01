@@ -27,7 +27,7 @@ class ElasticsearchProvider extends ServiceProvider
             case 'aws':
                 app(EngineManager::class)->extend('elasticsearch', function($app) {
                     $provider = CredentialProvider::defaultProvider();
-                    $handler = new ElasticsearchPhpHandler(config('laravel-scout-elastic.region', 'elastic'), $provider);
+                    $handler = new ElasticsearchPhpHandler(config('laravel-scout-elastic.region', 'us-west-2'), $provider);
                     return new ElasticsearchEngine(ElasticBuilder::create()
                         ->setHandler($handler)
                         ->setHosts(config('scout.elasticsearch.hosts'))
