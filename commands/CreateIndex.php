@@ -51,11 +51,13 @@ class CreateIndex extends Command
                             ->setHandler($handler)
                             ->setHosts(config('scout.elasticsearch.hosts'))
                             ->build();
+                break;
             case 'elastic':
             default:
                 $client = ClientBuilder::create()
                     ->setHosts(config('scout.elasticsearch.hosts'))
                     ->build();
+                break;
         }
         
         if(!$client->indices()->exists(['index' => config('scout.elasticsearch.index')])) {
