@@ -16,6 +16,10 @@ class ElasticsearchProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->publishes([
+            __DIR__ . '../commands/CreateIndex.php' => app_path('Console/Commands/CreateIndex.php');,
+        ]);
+
         $provider = env('ELASTICSEARCH_PROVIDER', 'elastic');
 
         switch ($provider) {
