@@ -62,14 +62,18 @@ If your CI environment does not have access to a working Elasticsearch instance,
 ### Setting up Elasticsearch configuration
 You must have a Elasticsearch server up and running with the index you want to use created.
 
-If the index doesn't exist, add 
+If the index doesn't exist, run 
 
+```bash
+php artisan vendor:publish  --provider="ScoutEngines\Elasticsearch\ElasticsearchProvider"
+```
+and add
 
 ```php
 // App/Console/Kernel.php
 protected $commands = [
     ...
-    App\Console\Commands\CreateIndex::class
+    \App\Console\Commands\CreateIndex::class
     ...
 ],
 ```
