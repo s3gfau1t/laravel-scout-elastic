@@ -18,15 +18,16 @@ class ElasticsearchProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../commands/CreateIndex.php' => app_path('Console/Commands/CreateIndex.php'),
+            __DIR__ . '/../config/laravel-scout-elastic.php' => config_path('laravel-scout-elastic.php'),
         ]);
 
-        $provider = env('ELASTICSEARCH_PROVIDER', 'elastic');
+        $provider = config('laravel-scout-elastic.provider', 'elastic');
 
         switch ($provider) {
             case 'aws':
                 app(EngineManager::class)->extend('elasticsearch', function($app) {
                     $provider = CredentialProvider::defaultProvider();
-                    $handler = new ElasticsearchPhpHandler(getenv('AWS_REGION'), $provider);
+                    $handler = new ElasticsearchPhpHandler(config('laravel-scout-elastic.region', 'elastic'), $provider);
                     return new ElasticsearchEngine(ElasticBuilder::create()
                         ->setHandler($handler)
                         ->setHosts(config('scout.elasticsearch.hosts'))
