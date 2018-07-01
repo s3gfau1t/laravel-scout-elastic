@@ -7,11 +7,10 @@ return [
     | Default Provider
     |--------------------------------------------------------------------------
     |
-    | This option controls the default search connection that gets used while
-    | using Laravel Scout. This connection is used when syncing all models
-    | to the search service. You should adjust this based on your needs.
-    |
-    | Supported: "algolia", "null"
+    | This option controls whether to create the Elasticesarch client with v4
+    | signing for AWS or just a normal client.
+    | 
+    | Supported: "elasticsearch", "aws"
     |
     */
 
@@ -19,12 +18,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Index Prefix
+    | Region
     |--------------------------------------------------------------------------
     |
-    | Here you may specify a prefix that will be applied to all search index
-    | names used by Scout. This prefix may be useful if you have multiple
-    | "tenants" or applications sharing the same search infrastructure.
+    | Ignored if provider is elasticsearch
+    |
+    | Put your AWS region in here. Sure, could poll the metadata service on
+    | each call, but that seems like a lot of unnecessary overhead. So put it
+    | here to override .env values.
     |
     */
 

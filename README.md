@@ -59,28 +59,15 @@ If your CI environment does not have access to a working Elasticsearch instance,
 <env name="SCOUT_DRIVER" value='"null"' />
 ```
 
-### Setting up Elasticsearch configuration
-You must have a Elasticsearch server up and running with the index you want to use created.
+## Laravel Configuration
 
-If the index doesn't exist, run 
+After you've published the Laravel Scout package configuration
 
 ```bash
 php artisan vendor:publish  --provider="ScoutEngines\Elasticsearch\ElasticsearchProvider"
 ```
-and add
 
-```php
-// App/Console/Kernel.php
-protected $commands = [
-    ...
-    \App\Console\Commands\CreateIndex::class
-    ...
-],
-```
-
-If you need help with this please refer to the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
-
-After you've published the Laravel Scout package configuration:
+you'll need to update the main scout configuration
 
 ```php
 // config/scout.php
@@ -95,6 +82,36 @@ After you've published the Laravel Scout package configuration:
         ],
     ],
 ...
+```
+
+and this package's configuration
+
+```php
+// config/laravel-scout-elastic
+// set this if you don't want to include it in your .env
+    'provider' => env('ELASTICSEARCH_PROVIDER', 'elasticsearch'),
+...
+    'region' => env('AWS_REGION', 'us-west-2'),
+...
+```
+
+and enable the artisan job:
+```php
+// App/Console/Kernel.php
+protected $commands = [
+    ...
+    \App\Console\Commands\CreateIndex::class
+    ...
+],
+```
+
+### Elasticsearch Configuration
+Scout will happily throw an error if it cannot create contact your Elasticsearch server or the index doesn't exist.
+
+Creating an index can be kinda arcane, so if the index doesn't exist, you can include the following artisan command in your deployment stack to check if the index exists, and if it doesnt then it will create it.
+
+```bash
+php artisan scout:create-index
 ```
 
 ## Usage
