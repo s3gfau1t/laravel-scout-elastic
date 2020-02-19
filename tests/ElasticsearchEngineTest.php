@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Eloquent\Collection;
+use Laravel\Scout\Builder;
 use ScoutEngines\Elasticsearch\ElasticsearchEngine;
 
 class ElasticsearchEngineTest extends PHPUnit_Framework_TestCase
@@ -109,12 +110,14 @@ class ElasticsearchEngineTest extends PHPUnit_Framework_TestCase
         $client = Mockery::mock('Elasticsearch\Client');
         $engine = new ElasticsearchEngine($client, 'scout');
 
-        $model = Mockery::mock('Illuminate\Database\Eloquent\Model');
-        $model->shouldReceive('getKeyName')->andReturn('id');
-        $model->shouldReceive('whereIn')->once()->with('id', ['1'])->andReturn($model);
-        $model->shouldReceive('get')->once()->andReturn(Collection::make([new ElasticsearchEngineTestModel]));
+        $builder = Mockery::mock(Builder::class);
 
-        $results = $engine->map([
+        $model = Mockery::mock('Illuminate\Database\Eloquent\Model');
+        $model->shouldReceive('getScoutKey')->andReturn('1');
+        $model->shouldReceive('getScoutModelsByIds')->once()->with($builder, ['1'])->andReturn($models = Collection::make([$model]));
+        $model->shouldReceive('newCollection')->andReturn($models);
+
+        $results = $engine->map($builder, [
             'hits' => [
                 'total' => '1',
                 'hits' => [
