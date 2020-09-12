@@ -6,7 +6,7 @@
         "php": ">=5.6.4",
         "laravel/scout": "^5.0|^6.0|^7.0",
         "elasticsearch/elasticsearch": "~6.7",
-        "jsq/amazon-es-php": "^0.2"
+        "jsq/amazon-es-php": "^0.3"
     },
      "require-dev": {
         "fzaninotto/faker": "~1.4",
