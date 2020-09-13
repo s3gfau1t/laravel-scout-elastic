@@ -52,7 +52,7 @@ class ElasticsearchEngine extends Engine
     protected function getIndex($model)
     {
         return ($this->perModelIndex ? $this->index . $model->searchableAs() : $this->index);
-    }       }
+    }
 
     /**
      * Update the given model in the index.
@@ -79,7 +79,10 @@ class ElasticsearchEngine extends Engine
             ];
         });
 
-        $this->elastic->bulk($params);
+        $response = $this->elastic->bulk($params);
+        if ($response['errors']) {
+            throw new \Elasticsearch\Common\Exceptions\ClientErrorResponseException($response['items'][0]['update']['error']['reason']);
+        }
     }
 
     /**
