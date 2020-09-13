@@ -76,7 +76,11 @@ you'll need to update the main scout configuration
 
 ...
     'elasticsearch' => [
-        'index' => env('ELASTICSEARCH_INDEX', 'laravel'),
+        'index' => [
+            // if using more than one index, you likely want to change this to each of
+            // your indexes. quite possibly using searchableAs on your models.
+            env('ELASTICSEARCH_INDEX', 'scout')
+        ],
         'hosts' => [
             env('ELASTICSEARCH_HOST', 'http://localhost'),
         ],

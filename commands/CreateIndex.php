@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use Aws\ElasticsearchService\ElasticsearchPhpHandler;
 use Elasticsearch\ClientBuilder;
+use Illuminate\Console\Command;
 
 class CreateIndex extends Command
 {
@@ -23,16 +23,6 @@ class CreateIndex extends Command
     protected $description = 'Create index required for Scout';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return mixed
@@ -48,23 +38,27 @@ class CreateIndex extends Command
 
                 // Use this handler to create an Elasticsearch-PHP client
                 $client = ClientBuilder::create()
-                            ->setHandler($handler)
-                            ->setHosts(config('scout.elasticsearch.hosts'))
-                            ->build();
+                    ->setHandler($handler)
+                    ->setHosts(config('scout.elasticsearch.hosts'))
+                    ->build();
+
                 break;
             case 'elastic':
             default:
                 $client = ClientBuilder::create()
                     ->setHosts(config('scout.elasticsearch.hosts'))
                     ->build();
+
                 break;
         }
-        
-        if(!$client->indices()->exists(['index' => config('scout.elasticsearch.index')])) {
-            $params = [
-                'index' => config('scout.elasticsearch.index'),
-            ];
-            $client->indices()->create($params);
+
+        foreach (config('scout.elasticsearch.indexes') as $index) {
+            if (! $client->indices()->exists(['index' => $index])) {
+                $params = [
+                    'index' => $index,
+                ];
+                $client->indices()->create($params);
+            }
         }
     }
 }
