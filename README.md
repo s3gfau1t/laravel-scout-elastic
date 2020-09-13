@@ -80,6 +80,7 @@ you'll need to update the main scout configuration
         'hosts' => [
             env('ELASTICSEARCH_HOST', 'http://localhost'),
         ],
+        'perModelIndex' => true,
     ],
 ...
 ```

@@ -32,7 +32,8 @@ class ElasticsearchProvider extends ServiceProvider
                         ->setHandler($handler)
                         ->setHosts(config('scout.elasticsearch.hosts'))
                         ->build(),
-                        config('scout.elasticsearch.index')
+                        config('scout.elasticsearch.index'),
+                        config('scout.elasticsearch.perModelIndex', false)
                     );
                 });
                 break;
@@ -42,7 +43,8 @@ class ElasticsearchProvider extends ServiceProvider
                     return new ElasticsearchEngine(ElasticBuilder::create()
                         ->setHosts(config('scout.elasticsearch.hosts'))
                         ->build(),
-                        config('scout.elasticsearch.index')
+                        config('scout.elasticsearch.index'),
+                        config('scout.elasticsearch.perModelIndex', false)
                     );
                 });
                 break;
