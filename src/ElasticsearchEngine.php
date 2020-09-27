@@ -71,6 +71,7 @@ class ElasticsearchEngine extends Engine
                     '_id' => $model->getKey(),
                     '_index' => $this->getIndex($model),
                     '_type' => $model->searchableAs(),
+                    'retry_on_conflict' => config('laravel-scout-elastic.retry_on_conflict', 0)
                 ]
             ];
             $params['body'][] = [

@@ -31,4 +31,21 @@ return [
 
     'region' => env('AWS_REGION', 'us-west-2'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Number of times to retry and update
+    |--------------------------------------------------------------------------
+    |
+    | Models with a high-volume of changes (due to things like Listeners), can have
+    | issues doing updates as order can get all mixed up. This parameter adjusts
+    | how many times to attempt the update.
+    |
+    | See https://qbox.io/blog/optimistic-concurrency-control-in-elasticsearch for
+    | a more in-depth explanation
+    | 
+    | Default: 0 (do not attempt again)
+    |
+    */
+
+    'retry_on_conflict' => 0,
 ];
